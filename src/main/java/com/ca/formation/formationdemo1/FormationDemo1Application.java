@@ -35,6 +35,8 @@ public class FormationDemo1Application {
         System.out.println(" Démarrage application Spring Boot");
     }
 
+
+
     @Bean
     public CommandLineRunner demo(PersonneRepository repository){
         return (args -> {
