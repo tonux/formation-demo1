@@ -11,12 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
-@EnableSwagger2
-@EnableWebMvc
 @SpringBootApplication
 public class FormationDemo1Application {
 
