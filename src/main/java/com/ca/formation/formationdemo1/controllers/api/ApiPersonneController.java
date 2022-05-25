@@ -2,24 +2,21 @@ package com.ca.formation.formationdemo1.controllers.api;
 
 import com.ca.formation.formationdemo1.exception.ResourceNotFoundException;
 import com.ca.formation.formationdemo1.models.Personne;
-import com.ca.formation.formationdemo1.repositories.PersonneRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.ca.formation.formationdemo1.services.PersonneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@Api(value = "Personne Rest API")
+
 @RestController
 @RequestMapping(value = "/api/v2/personnes")
 public class ApiPersonneController {
 
-    private final PersonneRepository personneRepository;
+    private final PersonneService personneService;
 
-    public ApiPersonneController(PersonneRepository personneRepository) {
-        this.personneRepository = personneRepository;
+    public ApiPersonneController(PersonneService personneService) {
+        this.personneService = personneService;
     }
 
     /**
@@ -32,7 +29,6 @@ public class ApiPersonneController {
      * - GET /api/v1/personnes/search?nom="Jean"
      */
 
-    @ApiOperation(value="API de bonjour", response = String.class)
     @GetMapping("/hello")
     public String hello(){
         return "Bonjour tout le monde";
@@ -49,44 +45,39 @@ public class ApiPersonneController {
      */
     @GetMapping
     public ResponseEntity<List<Personne>> getToutPersonne(){
-        List<Personne> personnes = (List) personneRepository.findAll();
+        List<Personne> personnes = personneService.getPersonnes();
         return ResponseEntity.ok().body(personnes);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Personne> getPersonne(@PathVariable(value="id") Long id) throws ResourceNotFoundException {
-        Personne personne = personneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Personne pas trouvé") );
+        Personne personne = personneService.getPersonne(id);
        return ResponseEntity.ok().body(personne);
     }
 
     @PostMapping
     public ResponseEntity<Personne> addPersonne(@RequestBody Personne personne){
-        Personne personneResponse = personneRepository.save(personne);
+        Personne personneResponse = personneService.addPersonne(personne);
         return ResponseEntity.ok().body(personneResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Personne> updatePersonne(@PathVariable(value="id") Long id, @RequestBody Personne personne ) throws Exception {
+    public ResponseEntity<Personne> updatePersonne(@PathVariable(value="id") Long id, @RequestBody Personne personneRequest ) throws Exception {
 
-        Optional<Personne> optionalPersonne = personneRepository.findById(id);
+        Personne personne = personneService.updatePersonne(id, personneRequest);
 
-        if(optionalPersonne.isEmpty()){
-            throw new Exception("Personne pas trouvé");
-        }
-
-        Personne personneResponse = personneRepository.save(personne);
-        return ResponseEntity.ok().body(personneResponse);
+        return ResponseEntity.ok().body(personne);
     }
 
     @DeleteMapping("/{id}")
     public String deletePersonne(@PathVariable(value="id") Long id){
-        personneRepository.deleteById(id);
+        personneService.deletePersonne(id);
         return "OK";
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<Personne>> getPersonneParNom(@RequestParam(name = "nom") String nom){
-        List<Personne> personnes = personneRepository.findByNom(nom);
+        List<Personne> personnes = personneService.getPersonneParNom(nom);
         return ResponseEntity.ok().body(personnes);
     }
 
