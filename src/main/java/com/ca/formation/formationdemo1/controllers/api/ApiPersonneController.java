@@ -1,14 +1,17 @@
 package com.ca.formation.formationdemo1.controllers.api;
 
+import com.ca.formation.formationdemo1.exception.ResourceNotFoundException;
 import com.ca.formation.formationdemo1.models.Personne;
 import com.ca.formation.formationdemo1.repositories.PersonneRepository;
-import org.springframework.http.HttpStatus;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@Api(value = "Personne Rest API")
 @RestController
 @RequestMapping(value = "/api/v2/personnes")
 public class ApiPersonneController {
@@ -29,6 +32,7 @@ public class ApiPersonneController {
      * - GET /api/v1/personnes/search?nom="Jean"
      */
 
+    @ApiOperation(value="API de bonjour", response = String.class)
     @GetMapping("/hello")
     public String hello(){
         return "Bonjour tout le monde";
@@ -50,9 +54,8 @@ public class ApiPersonneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Personne> getPersonne(@PathVariable(value="id") Long id) throws Exception {
-        Personne personne = personneRepository.findById(id).orElseThrow(() -> new Exception("Personne pas trouvé") );
-
+    public ResponseEntity<Personne> getPersonne(@PathVariable(value="id") Long id) throws ResourceNotFoundException {
+        Personne personne = personneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Personne pas trouvé") );
        return ResponseEntity.ok().body(personne);
     }
 
