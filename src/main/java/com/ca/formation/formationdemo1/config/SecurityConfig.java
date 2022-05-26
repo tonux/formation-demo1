@@ -2,6 +2,7 @@ package com.ca.formation.formationdemo1.config;
 
 
 import com.ca.formation.formationdemo1.repositories.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,9 +14,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,9 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
-
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> (UserDetails) utilisateurRepository
+
+        auth.userDetailsService(username -> utilisateurRepository
                 .findByUsername(username)
                 .orElseThrow(
                         () -> new UsernameNotFoundException(
@@ -51,9 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         // activer les cors et desactiver les CSRF
         http = http.cors().and().csrf().disable();
-
 
         // Mettre la getion de la session a un sans etat
         http = http

@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface UtilisateurRepository extends CrudRepository<Utilisateur, Long> {
 
     Optional<Utilisateur> findByUsername(String username);
-
 }

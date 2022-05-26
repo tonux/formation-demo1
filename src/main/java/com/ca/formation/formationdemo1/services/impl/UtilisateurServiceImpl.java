@@ -37,6 +37,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         if(utilisateurRequest.getAuthoritie() == null){
             utilisateurRequest.setAuthoritie(Set.of(new Role(Role.READ)));
         }
+
         Utilisateur utilisateur = utilisateurRequest;
 
         utilisateur.setPassword(passwordEncoder.encode(utilisateurRequest.getPassword()));
