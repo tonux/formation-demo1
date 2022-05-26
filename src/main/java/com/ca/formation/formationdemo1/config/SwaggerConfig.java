@@ -2,33 +2,47 @@ package com.ca.formation.formationdemo1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.GroupedOpenApi;
 
 @Configuration
 public class SwaggerConfig {
 
-    /*
     @Bean
-    public Docket configApi(){
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-                .paths(PathSelectors.any())
-                .build()
-                .pathMapping("/");
-    }
-
-    private ApiInfo apiInfo(){
-        return new ApiInfoBuilder()
-                .title("API Formation")
-                .description("Mettre une description de l'API")
-                .version("1.0")
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("Api")
+                .pathsToMatch("/api/**")
                 .build();
     }
 
-     */
-
-
+    @Bean
+    public OpenAPI springShopOpenAPI() {
+        final String securitySchemeName="bearerAuth";
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(
+                        new Components()
+                                .addSecuritySchemes(securitySchemeName,
+                                        new SecurityScheme()
+                                                .name(securitySchemeName)
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT"))
+                )
+                .info(new Info().title("Formtion API")
+                        .description("Formation sample application")
+                        .version("1.0.0")
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("Formation Wiki Documentation")
+                        .url("https://Formation-api.wiki.github.org/docs"));
+    }
 }

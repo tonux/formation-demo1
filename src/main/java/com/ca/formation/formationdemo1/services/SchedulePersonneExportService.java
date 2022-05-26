@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @EnableAsync
 public class SchedulePersonneExportService {
 
-    @Async
-    @Scheduled(fixedDelay = 10000)
+    //@Async
+    //@Scheduled(fixedDelay = 10000)
     public void envoyerListePersonnes(){
 
         System.out.println(" Envoyer la liste des personne - "+System.currentTimeMillis()/1000);

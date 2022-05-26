@@ -39,6 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UtilisateurRepository utilisateurRepository;
     private final JwtFilter jwtFilter;
 
+    @Value("${springdoc.api-docs.path}")
+    private String apiDocPath;
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerPath;
+
     public SecurityConfig(UtilisateurRepository utilisateurRepository, JwtFilter jwtFilter) {
         super();
 
@@ -83,6 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // mettre les permissions sur nos resources
         http.authorizeHttpRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers(apiDocPath+"/**").permitAll()
+                .antMatchers(swaggerPath+"/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/h2/**").permitAll()
                 .antMatchers("/api/v2/auth/**").permitAll()
