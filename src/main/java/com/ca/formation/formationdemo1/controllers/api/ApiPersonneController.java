@@ -2,8 +2,10 @@ package com.ca.formation.formationdemo1.controllers.api;
 
 import com.ca.formation.formationdemo1.exception.ResourceNotFoundException;
 import com.ca.formation.formationdemo1.models.Personne;
+import com.ca.formation.formationdemo1.models.Role;
 import com.ca.formation.formationdemo1.services.PersonneService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +31,13 @@ public class ApiPersonneController {
      * - GET /api/v1/personnes/search?nom="Jean"
      */
 
+    @PreAuthorize("hasAuthority('"+ Role.READ+"')")
     @GetMapping("/hello")
     public String hello(){
         return "Bonjour tout le monde";
     }
 
+    @PreAuthorize("hasAuthority('"+ Role.ADMIN+"')")
     @GetMapping("/bye")
     public  String byebye(){
         return "Bye bye";

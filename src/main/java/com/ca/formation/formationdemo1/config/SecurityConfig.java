@@ -1,6 +1,7 @@
 package com.ca.formation.formationdemo1.config;
 
 
+import com.ca.formation.formationdemo1.config.jwtConfig.JwtFilter;
 import com.ca.formation.formationdemo1.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +37,13 @@ import static java.lang.String.format;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UtilisateurRepository utilisateurRepository;
+    private final JwtFilter jwtFilter;
 
-    public SecurityConfig(UtilisateurRepository utilisateurRepository) {
+    public SecurityConfig(UtilisateurRepository utilisateurRepository, JwtFilter jwtFilter) {
         super();
 
         this.utilisateurRepository = utilisateurRepository;
+        this.jwtFilter = jwtFilter;
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
     }
 
@@ -86,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v2/documentation").permitAll()
                 .anyRequest().authenticated();
 
-        // todo Ajouter notre filtre avant UsernamePasswordFiltre
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     // mettre le type d'encodage du mot de passe

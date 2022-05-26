@@ -22,7 +22,7 @@ public class InitDatabase implements ApplicationListener<ApplicationReadyEvent> 
     public void onApplicationEvent(ApplicationReadyEvent event) {
         try{
             // creer utilisateur
-            utilisateurService.registration(new Utilisateur("michel@formation.ca", "Passer@123", "Michel", Set.of(new Role(Role.READ), new Role(Role.ADMIN))));
+            utilisateurService.registration(new Utilisateur("michel@formation.ca", "Passer@123", "Michel", Set.of(new Role(Role.READ))));
             utilisateurService.registration(new Utilisateur("clara@formation.ca", "Passer@123", "Clara", Set.of(new Role(Role.ADMIN))));
         }catch (Exception e){
             e.printStackTrace();

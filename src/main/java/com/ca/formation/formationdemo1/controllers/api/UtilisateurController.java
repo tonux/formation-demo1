@@ -32,7 +32,7 @@ public class UtilisateurController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, jwtUtil.generateAccesToken(utilisateur))
-                    .header("refresh_token", "le refresh token")
+                    .header("refresh_token", jwtUtil.refreshAccesToken(utilisateur))
                     .body(utilisateur);
         } catch (BadCredentialsException e){
           return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
