@@ -36,8 +36,6 @@ public class FormationDemo1Application {
         System.out.println(" Démarrage application Spring Boot");
     }
 
-
-
     @Bean
     public CommandLineRunner demo(PersonneRepository repository){
         return (args -> {
@@ -45,18 +43,12 @@ public class FormationDemo1Application {
             repository.save(new Personne("Beau", "Michel", 30));
             repository.save(new Personne("Abdel", "Moussa", 40));
 
-           // System.out.println(repository.count());
-
             repository.delete(personne1);
 
             List<Personne> personneList = repository.findByNomAndPrenom("Abdel", "Moussa");
 
-
-            //List<Personne> personneList = repository.findNomPrenom2("Abdel", "Moussa");
-
            personneList.stream().forEach(System.out::println);
 
-           // System.out.println(personneList.size());
         });
     }
 

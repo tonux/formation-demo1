@@ -69,11 +69,8 @@ public class PersonneControllerTest {
                 .get("/api/v2/personnes")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON);
-
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-
         MockHttpServletResponse response = mvcResult.getResponse();
-
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
@@ -117,15 +114,13 @@ public class PersonneControllerTest {
 
     @Test
     public void ajouterPersonne_() throws Exception{
+        Personne personne = new Personne("tonux", "samb", 40);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer "+tokenRequest);
         HttpEntity<Personne> entity = new HttpEntity<Personne>(null, headers);
-
-        ResponseEntity<Personne> responseEntity = restTemplate.exchange(getRootUrl() + "/personnes", HttpMethod.POST, entity, Personne.class, new Personne("tonux", "samb", 40));
-
+        ResponseEntity<Personne> responseEntity = restTemplate
+                .exchange(getRootUrl() + "/personnes", HttpMethod.POST, entity, Personne.class, personne);
         assertNotNull(responseEntity);
-        //assertEquals(personne.getNom(), "tonux");
-
     }
 
     @Test
@@ -154,13 +149,9 @@ public class PersonneControllerTest {
                 .post("/api/v2/auth/login")
                 .content(body)
                 .contentType(MediaType.APPLICATION_JSON);
-
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
-
         String token = mvcResult.getResponse().getHeader(HttpHeaders.AUTHORIZATION);
-
         tokenRequest = token;
-
     }
 
 }
